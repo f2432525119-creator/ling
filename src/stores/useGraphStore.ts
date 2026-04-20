@@ -8,23 +8,51 @@ type GraphStore = {
   nodes: StoryGraphNode[];
   edges: StoryGraphEdge[];
   selectedNodeId: string | null;
+  focusedNodeId: string | null;
+  lastRebuildAt: number;
   rebuildFromNarrative: (
     narrativeNodes: NarrativeNode[],
     currentNodeId: string,
+    options?: { selectedNodeId?: string | null },
   ) => void;
-  setSelectedNodeId: (nodeId: string | null) => void;
+  selectNode: (nodeId: string | null) => void;
+  focusNode: (nodeId: string | null) => void;
+  resetGraph: () => void;
 };
 
-export const useGraphStore = create<GraphStore>((set) => ({
+export const useGraphStore = create<GraphStore>((set, get) => ({
   nodes: [],
   edges: [],
   selectedNodeId: null,
-  rebuildFromNarrative: (narrativeNodes, currentNodeId) => {
+  focusedNodeId: null,
+  lastRebuildAt: 0,
+  rebuildFromNarrative: (narrativeNodes, currentNodeId, options) => {
+    const prevSelectedNodeId = options?.selectedNodeId ?? get().selectedNodeId;
+    const fallbackSelectedNodeId = narrativeNodes.some((node) => node.id === prevSelectedNodeId)
+      ? prevSelectedNodeId
+      : currentNodeId;
+
     const { nodes, edges } = buildGraphFromNarrative({
       narrativeNodes,
       currentNodeId,
+      selectedNodeId: fallbackSelectedNodeId,
     });
-    set({ nodes, edges, selectedNodeId: currentNodeId });
+
+    set({
+      nodes,
+      edges,
+      selectedNodeId: fallbackSelectedNodeId,
+      lastRebuildAt: Date.now(),
+    });
   },
-  setSelectedNodeId: (nodeId) => set({ selectedNodeId: nodeId }),
+  selectNode: (nodeId) => set({ selectedNodeId: nodeId }),
+  focusNode: (nodeId) => set({ focusedNodeId: nodeId }),
+  resetGraph: () =>
+    set({
+      nodes: [],
+      edges: [],
+      selectedNodeId: null,
+      focusedNodeId: null,
+      lastRebuildAt: Date.now(),
+    }),
 }));

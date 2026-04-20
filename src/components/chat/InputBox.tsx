@@ -30,7 +30,7 @@ export function InputBox({ onSubmit, loading = false }: InputBoxProps) {
         <button
           type="submit"
           disabled={loading}
-          className="h-10 rounded-lg bg-primary px-4 text-sm text-white transition-colors duration-200 hover:bg-primary-hover disabled:opacity-40 disabled:cursor-not-allowed"
+          className="h-10 rounded-lg bg-primary px-4 text-sm font-medium text-white transition-all duration-200 hover:bg-primary-hover disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? "生成中" : "发送"}
         </button>

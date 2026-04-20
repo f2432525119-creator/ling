@@ -2,31 +2,31 @@
 
 /* ============================================
    LING - 书籍分支叙事体验 设计系统
-   风格：极简主义 / 深色模式 / 沉浸阅读
+   风格：极简主义 / 浅色模式 / 沉浸阅读
    ============================================ */
 
 :root {
   /* === 颜色系统 === */
   /* 主色调 */
   --color-primary: #007aff;
-  --color-primary-hover: #0066d6;
-  --color-primary-muted: rgba(0, 122, 255, 0.15);
+  --color-primary-hover: #0052cc;
+  --color-primary-muted: rgba(0, 122, 255, 0.1);
   
   /* 背景色 */
-  --color-background: #000000;
-  --color-background-elevated: #0d0d0d;
-  --color-background-card: #141414;
-  --color-background-panel: #1a1a1a;
+  --color-background: #ffffff;
+  --color-background-elevated: #f9f9fb;
+  --color-background-card: #f5f5f7;
+  --color-background-panel: #ffffff;
   
   /* 前景/文字色 */
-  --color-foreground: #f5f5f7;
-  --color-foreground-secondary: rgba(245, 245, 247, 0.7);
-  --color-foreground-tertiary: rgba(245, 245, 247, 0.45);
-  --color-foreground-muted: rgba(245, 245, 247, 0.25);
+  --color-foreground: #1d1d1f;
+  --color-foreground-secondary: rgba(29, 29, 31, 0.75);
+  --color-foreground-tertiary: rgba(29, 29, 31, 0.5);
+  --color-foreground-muted: rgba(29, 29, 31, 0.3);
   
   /* 边框 */
-  --color-border: rgba(255, 255, 255, 0.08);
-  --color-border-strong: rgba(255, 255, 255, 0.15);
+  --color-border: rgba(0, 0, 0, 0.08);
+  --color-border-strong: rgba(0, 0, 0, 0.15);
   
   /* 状态色 */
   --color-success: #30d158;
@@ -97,7 +97,7 @@
 /* === 基础样式 === */
 html {
   background-color: var(--color-background);
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 body {

@@ -8,7 +8,7 @@ interface CardProps extends HTMLAttributes<HTMLDivElement> {
 
 const variantStyles = {
   default: "bg-card border border-border",
-  elevated: "bg-elevated border border-border shadow-lg shadow-black/20",
+  elevated: "bg-elevated border border-border shadow-md shadow-black/5",
   outlined: "bg-transparent border border-border-strong",
 };
 

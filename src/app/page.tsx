@@ -1,23 +1,32 @@
-import Link from "next/link";
+import {
+  Header,
+  StoryForm,
+  BranchGraphPanel,
+  NarrativePanel,
+} from "@/components/home";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#f8f8f8] px-6">
-      <main className="w-full max-w-2xl rounded-3xl border border-black/10 bg-white p-10">
-        <p className="text-xs uppercase tracking-[0.2em] text-black/40">AI Story World</p>
-        <h1 className="mt-4 text-3xl font-semibold tracking-tight">
-          多时间线叙事工作台
-        </h1>
-        <p className="mt-4 text-sm leading-7 text-black/65">
-          先以 mock 数据跑通「对话叙事 → 世界状态更新 → 分支树可视化」闭环，后续再接真实 AI。
-        </p>
-        <Link
-          href="/world"
-          className="mt-8 inline-flex rounded-xl bg-black px-4 py-2 text-sm text-white"
-        >
-          进入世界
-        </Link>
-      </main>
+    <div className="min-h-screen bg-background">
+      {/* 顶部区域：标题 + 输入表单 */}
+      <section className="flex flex-col items-center px-4 pb-12 pt-16 md:px-6 md:pb-16 md:pt-24">
+        <Header
+          title="多时间线叙事工作台"
+          subtitle="创建你的交互式小说，探索无限可能的故事分支"
+        />
+
+        <div className="mt-10 w-full max-w-md md:mt-12">
+          <StoryForm />
+        </div>
+      </section>
+
+      {/* 下半部分：分支图 + 叙事面板 */}
+      <section className="border-t border-border bg-elevated px-4 py-8 md:px-6 md:py-12">
+        <div className="mx-auto grid max-w-6xl gap-6 md:grid-cols-2">
+          <BranchGraphPanel />
+          <NarrativePanel />
+        </div>
+      </section>
     </div>
   );
 }

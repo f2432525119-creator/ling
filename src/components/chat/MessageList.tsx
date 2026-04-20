@@ -10,10 +10,10 @@ export function MessageList({ messages }: MessageListProps) {
       {messages.map((message) => (
         <article
           key={message.id}
-          className={`rounded-xl px-3 py-2 text-sm leading-6 ${
+          className={`rounded-xl px-3 py-2 text-sm leading-relaxed animate-fade-in ${
             message.role === "user"
-              ? "ml-auto w-[85%] bg-black text-white"
-              : "mr-auto w-[90%] border border-black/10 bg-white text-black/80"
+              ? "ml-auto w-[85%] bg-primary text-white"
+              : "mr-auto w-[90%] border border-border bg-card text-secondary"
           }`}
         >
           {message.content}

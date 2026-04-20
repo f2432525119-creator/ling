@@ -17,7 +17,7 @@ export function ChatPanel() {
 
   return (
     <div className="flex h-full flex-col">
-      <div className="border-b border-black/10 px-4 py-3 text-sm text-black/60">
+      <div className="border-b border-border px-4 py-3 text-sm text-secondary">
         对话叙事
       </div>
       <MessageList messages={messages} />

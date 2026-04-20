@@ -3,28 +3,46 @@
 import { useState } from "react";
 import { Button, Input } from "@/components/ui";
 
-interface StoryFormProps {
-  onSubmit?: (data: { bookTitle: string; synopsis: string }) => void;
+/** 表单提交数据类型 */
+export interface BookInputData {
+  bookTitle: string;
+  synopsis: string;
 }
 
-export function StoryForm({ onSubmit }: StoryFormProps) {
+interface BookInputFormProps {
+  /** 表单提交回调 */
+  onSubmit?: (data: BookInputData) => void;
+  /** 是否处于加载状态 */
+  loading?: boolean;
+  /** 提交按钮文案 */
+  submitText?: string;
+}
+
+export function BookInputForm({ 
+  onSubmit, 
+  loading = false,
+  submitText = "开始体验" 
+}: BookInputFormProps) {
   const [bookTitle, setBookTitle] = useState("");
   const [synopsis, setSynopsis] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit?.({ bookTitle, synopsis });
+    if (isValid && !loading) {
+      onSubmit?.({ bookTitle, synopsis });
+    }
   };
 
   const isValid = bookTitle.trim().length > 0 && synopsis.trim().length > 0;
 
   return (
-    <form onSubmit={handleSubmit} className="w-full max-w-md space-y-4">
+    <form onSubmit={handleSubmit} className="w-full space-y-4">
       <Input
         label="书名"
         placeholder="输入你的书籍标题"
         value={bookTitle}
         onChange={(e) => setBookTitle(e.target.value)}
+        disabled={loading}
       />
 
       <div className="flex flex-col gap-1.5">
@@ -40,7 +58,8 @@ export function StoryForm({ onSubmit }: StoryFormProps) {
           value={synopsis}
           onChange={(e) => setSynopsis(e.target.value)}
           rows={4}
-          className="w-full resize-none rounded-lg border border-border bg-card px-3 py-2.5 text-sm text-foreground placeholder:text-tertiary transition-colors duration-200 hover:border-border-strong focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+          disabled={loading}
+          className="w-full resize-none rounded-lg border border-border bg-card px-3 py-2.5 text-sm text-foreground placeholder:text-tertiary transition-colors duration-200 hover:border-border-strong focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-50"
         />
       </div>
 
@@ -49,8 +68,9 @@ export function StoryForm({ onSubmit }: StoryFormProps) {
         size="lg"
         className="w-full"
         disabled={!isValid}
+        loading={loading}
       >
-        开始体验
+        {submitText}
       </Button>
     </form>
   );

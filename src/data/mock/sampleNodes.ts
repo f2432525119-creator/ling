@@ -14,6 +14,8 @@ export const sampleNodes: NarrativeNode[] = [
       id: "node-root",
       title: "进入世界",
       arc: "开场",
+      type: "scene",
+      importance: 0.6,
     },
   },
 ];

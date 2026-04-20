@@ -38,5 +38,7 @@ export const sampleAiResponse: StructuredAIResponse = {
     id: "node-black-market-1",
     title: "黑市交易",
     arc: "第一幕",
+    type: "decision",
+    importance: 0.9,
   },
 };

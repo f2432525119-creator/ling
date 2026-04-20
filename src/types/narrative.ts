@@ -1,5 +1,13 @@
 import type { StateUpdate, WorldState } from "@/types/world";
 
+export type NarrativeNodeType =
+  | "scene"
+  | "decision"
+  | "event"
+  | "transition"
+  | "revelation"
+  | "consequence";
+
 export type StoryChoice = {
   id: string;
   text: string;
@@ -11,6 +19,8 @@ export type StoryNodeMeta = {
   id: string;
   title: string;
   arc: string;
+  type?: NarrativeNodeType;
+  importance?: number;
 };
 
 export type NarrativeNode = {
@@ -35,6 +45,8 @@ export type StructuredAIResponse = {
   next_node_meta: StoryNodeMeta;
   meta?: NarrativeApiMeta;
 };
+
+export type NarrativeApiResponse = StructuredAIResponse;
 
 export type NarrativeMode = "ai_driven" | "user_driven" | "mixed";
 

@@ -18,6 +18,7 @@ type NarrativeStore = {
   messages: NarrativeMessage[];
   isGenerating: boolean;
   error: string | null;
+  setCurrentNodeId: (nodeId: string) => void;
   commitNarrativeTurn: (args: {
     response: NarrativeApiResponse;
     userText: string;
@@ -41,6 +42,15 @@ export const useNarrativeStore = create<NarrativeStore>((set, get) => ({
   ],
   isGenerating: false,
   error: null,
+  setCurrentNodeId: (nodeId) => {
+    const hasTargetNode = get().nodes.some((node) => node.id === nodeId);
+    if (!hasTargetNode) return;
+
+    set({ currentNodeId: nodeId });
+    const nodes = get().nodes;
+    useGraphStore.getState().rebuildFromNarrative(nodes, nodeId, { selectedNodeId: nodeId });
+    useGraphStore.getState().focusNode(nodeId);
+  },
   commitNarrativeTurn: ({ response, userText }) => {
     const parentId = get().currentNodeId;
     const nextNodeId =
@@ -57,7 +67,9 @@ export const useNarrativeStore = create<NarrativeStore>((set, get) => ({
       meta: {
         id: nextNodeId,
         title: response.next_node_meta.title ?? "剧情推进",
-        arc: response.next_node_meta.arc ?? response.next_node_meta.type,
+        arc: response.next_node_meta.arc ?? response.next_node_meta.type ?? "剧情",
+        type: response.next_node_meta.type ?? "scene",
+        importance: response.next_node_meta.importance ?? 0.65,
       },
     };
 
@@ -83,14 +95,10 @@ export const useNarrativeStore = create<NarrativeStore>((set, get) => ({
       };
     });
 
-    // 1) narrative is already updated above
-    // 2) world store update
     useWorldStore.getState().applyStateUpdate(response.state_update);
-    // 3) graph store rebuild
-    useGraphStore.getState().rebuildFromNarrative(
-      updatedNodes,
-      nextNode.id,
-    );
+    useGraphStore
+      .getState()
+      .rebuildFromNarrative(updatedNodes, nextNode.id, { selectedNodeId: nextNode.id });
   },
   requestNarrative: async (userInput) => {
     set({ isGenerating: true, error: null });
@@ -180,6 +188,8 @@ export const useNarrativeStore = create<NarrativeStore>((set, get) => ({
       isGenerating: false,
       error: null,
     });
-    useGraphStore.getState().rebuildFromNarrative(sampleNodes, rootNode.id);
+    useGraphStore
+      .getState()
+      .rebuildFromNarrative(sampleNodes, rootNode.id, { selectedNodeId: rootNode.id });
   },
 }));

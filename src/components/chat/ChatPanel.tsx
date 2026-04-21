@@ -1,18 +1,30 @@
 "use client";
 
+import { type FormEvent, useState } from "react";
+
 import { InputBox } from "@/components/chat/InputBox";
 import { MessageList } from "@/components/chat/MessageList";
 import { useNarrativeStore } from "@/stores/useNarrativeStore";
 
 export function ChatPanel() {
+  const [text, setText] = useState("");
   const messages = useNarrativeStore((state) => state.messages);
   const isGenerating = useNarrativeStore((state) => state.isGenerating);
   const requestNarrative = useNarrativeStore((state) => state.requestNarrative);
   const commitNarrativeTurn = useNarrativeStore((state) => state.commitNarrativeTurn);
 
-  async function handleSubmit(userInput: string) {
-    const response = await requestNarrative(userInput);
-    commitNarrativeTurn(userInput, response);
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    if (!text.trim() || isGenerating) {
+      return;
+    }
+
+    const value = text.trim();
+    setText("");
+
+    const response = await requestNarrative(value);
+    commitNarrativeTurn(value, response);
   }
 
   return (
@@ -21,7 +33,12 @@ export function ChatPanel() {
         对话叙事
       </div>
       <MessageList messages={messages} />
-      <InputBox onSubmit={handleSubmit} loading={isGenerating} />
+      <InputBox
+        value={text}
+        onValueChange={setText}
+        onSubmit={handleSubmit}
+        loading={isGenerating}
+      />
     </div>
   );
 }

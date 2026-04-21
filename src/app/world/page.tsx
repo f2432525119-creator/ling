@@ -1,10 +1,10 @@
 import "reactflow/dist/style.css";
 
-import { ChatPanel } from "@/components/chat/ChatPanel";
-import { BranchGraph } from "@/components/graph/BranchGraph";
+import { GraphStage } from "@/components/graph/GraphStage";
 import { AppShell } from "@/components/layout/AppShell";
+import { NarrativePanel } from "@/components/narrative/NarrativePanel";
 import { WorldStatePanel } from "@/components/world/WorldStatePanel";
 
 export default function WorldPage() {
-  return <AppShell left={<ChatPanel />} center={<BranchGraph />} right={<WorldStatePanel />} />;
+  return <AppShell left={<NarrativePanel />} center={<GraphStage />} right={<WorldStatePanel />} />;
 }

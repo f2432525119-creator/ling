@@ -1,30 +1,28 @@
-"use client";
+import React from "react";
 
-import { ReactNode } from "react";
-
-import { TopBar } from "@/components/layout/TopBar";
-
-type AppShellProps = {
-  left: ReactNode;
-  center: ReactNode;
-  right: ReactNode;
-};
+interface AppShellProps {
+  left: React.ReactNode;
+  center: React.ReactNode;
+  right: React.ReactNode;
+}
 
 export function AppShell({ left, center, right }: AppShellProps) {
   return (
-    <div className="min-h-screen bg-[#f8f8f8] text-black">
-      <TopBar />
-      <main className="grid h-[calc(100vh-73px)] grid-cols-12 gap-4 p-4">
-        <section className="col-span-4 overflow-hidden rounded-2xl border border-black/10 bg-white">
-          {left}
-        </section>
-        <section className="col-span-5 overflow-hidden rounded-2xl border border-black/10 bg-white">
-          {center}
-        </section>
-        <section className="col-span-3 overflow-hidden rounded-2xl border border-black/10 bg-white">
-          {right}
-        </section>
-      </main>
+    <div className="flex h-full w-full bg-[#FAFAFA]">
+      {/* 左侧：聊天与互动区 */}
+      <aside className="z-10 w-[320px] shrink-0 flex-col border-r border-neutral-200 bg-white shadow-[2px_0_12px_-6px_rgba(0,0,0,0.05)]">
+        {left}
+      </aside>
+
+      {/* 中间：分支图谱可视化区 */}
+      <section className="relative flex flex-1 flex-col overflow-hidden bg-[#FAFAFA]">
+        {center}
+      </section>
+
+      {/* 右侧：世界状态面板区 */}
+      <aside className="z-10 w-[300px] shrink-0 overflow-y-auto border-l border-neutral-200 bg-white shadow-[-2px_0_12px_-6px_rgba(0,0,0,0.05)]">
+        {right}
+      </aside>
     </div>
   );
 }

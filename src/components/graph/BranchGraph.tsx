@@ -1,40 +1,36 @@
 "use client";
 
-import { useEffect } from "react";
 import ReactFlow, { Background, Controls } from "reactflow";
 
 import { useGraphStore } from "@/stores/useGraphStore";
-import { useNarrativeStore } from "@/stores/useNarrativeStore";
+
+import { NodeInfoPanel } from "./NodeInfoPanel";
 
 export function BranchGraph() {
-  const graphNodes = useGraphStore((state) => state.nodes);
-  const graphEdges = useGraphStore((state) => state.edges);
-  const rebuildFromNarrative = useGraphStore((state) => state.rebuildFromNarrative);
+  const nodes = useGraphStore((state) => state.nodes);
+  const edges = useGraphStore((state) => state.edges);
+  const onNodesChange = useGraphStore((state) => state.onNodesChange);
+  const onEdgesChange = useGraphStore((state) => state.onEdgesChange);
   const setSelectedNodeId = useGraphStore((state) => state.setSelectedNodeId);
-  const narrativeNodes = useNarrativeStore((state) => state.nodes);
-  const currentNodeId = useNarrativeStore((state) => state.currentNodeId);
-
-  useEffect(() => {
-    rebuildFromNarrative(narrativeNodes, currentNodeId);
-  }, [narrativeNodes, currentNodeId, rebuildFromNarrative]);
 
   return (
-    <div className="h-full w-full">
-      <div className="border-b border-black/10 px-4 py-3 text-sm text-black/60">
-        分支树
-      </div>
-      <div className="h-[calc(100%-49px)] w-full">
-        <ReactFlow
-          nodes={graphNodes}
-          edges={graphEdges}
-          fitView
-          onNodeClick={(_, node) => setSelectedNodeId(node.id)}
-          proOptions={{ hideAttribution: true }}
-        >
-          <Background gap={20} size={1} />
-          <Controls showInteractive={false} />
-        </ReactFlow>
-      </div>
+    <div className="relative h-full w-full">
+      <ReactFlow
+        nodes={nodes}
+        edges={edges}
+        onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
+        onNodeClick={(_, node) => setSelectedNodeId(node.id)}
+        onPaneClick={() => setSelectedNodeId(null)}
+        fitView
+        proOptions={{ hideAttribution: true }}
+        className="bg-[#FAFAFA]"
+      >
+        <Background color="#ccc" gap={16} />
+        <Controls showInteractive={false} className="border-neutral-200 shadow-sm" />
+      </ReactFlow>
+
+      <NodeInfoPanel />
     </div>
   );
 }

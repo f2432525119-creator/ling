@@ -1,3 +1,7 @@
+"use client";
+
+import { useEffect, useRef } from "react";
+
 import type { NarrativeMessage } from "@/types/narrative";
 
 type MessageListProps = {
@@ -5,20 +9,31 @@ type MessageListProps = {
 };
 
 export function MessageList({ messages }: MessageListProps) {
+  const endRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    endRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
   return (
-    <div className="flex-1 space-y-3 overflow-y-auto p-4">
+    <div className="flex-1 space-y-4 overflow-y-auto p-4">
       {messages.map((message) => (
-        <article
+        <div
           key={message.id}
-          className={`rounded-xl px-3 py-2 text-sm leading-6 ${
-            message.role === "user"
-              ? "ml-auto w-[85%] bg-black text-white"
-              : "mr-auto w-[90%] border border-black/10 bg-white text-black/80"
-          }`}
+          className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
         >
-          {message.content}
-        </article>
+          <div
+            className={`max-w-[85%] rounded-lg px-4 py-2.5 text-sm leading-relaxed ${
+              message.role === "user"
+                ? "bg-neutral-800 text-white"
+                : "border border-neutral-200 bg-neutral-100 text-neutral-800"
+            }`}
+          >
+            {message.content}
+          </div>
+        </div>
       ))}
+      <div ref={endRef} />
     </div>
   );
 }

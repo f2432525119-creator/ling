@@ -1,29 +1,24 @@
-"use client";
-
-import { FormEvent, useState } from "react";
+import type { FormEvent } from "react";
 
 type InputBoxProps = {
-  onSubmit: (text: string) => Promise<void>;
+  value: string;
   loading?: boolean;
+  onValueChange: (value: string) => void;
+  onSubmit: (event: FormEvent<HTMLFormElement>) => void;
 };
 
-export function InputBox({ onSubmit, loading = false }: InputBoxProps) {
-  const [text, setText] = useState("");
-
-  async function handleSubmit(event: FormEvent) {
-    event.preventDefault();
-    if (!text.trim() || loading) return;
-    const value = text.trim();
-    setText("");
-    await onSubmit(value);
-  }
-
+export function InputBox({
+  value,
+  loading = false,
+  onValueChange,
+  onSubmit,
+}: InputBoxProps) {
   return (
-    <form onSubmit={handleSubmit} className="border-t border-black/10 p-3">
+    <form onSubmit={onSubmit} className="border-t border-black/10 p-3">
       <div className="flex gap-2">
         <input
-          value={text}
-          onChange={(event) => setText(event.target.value)}
+          value={value}
+          onChange={(event) => onValueChange(event.target.value)}
           placeholder="输入你的行动..."
           className="h-10 flex-1 rounded-lg border border-black/10 px-3 text-sm outline-none focus:border-black/30"
         />

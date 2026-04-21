@@ -18,8 +18,8 @@ export function NarrativePanel() {
   const currentNode = nodes.find((node) => node.id === currentNodeId);
   const choices = currentNode?.choices ?? [];
 
-  async function runNarrativeTurn(userText: string, selectedChoiceId: string | null = null) {
-    const response = await requestNarrative(userText, selectedChoiceId);
+  async function runNarrativeTurn(userText: string) {
+    const response = await requestNarrative(userText);
     if (!response) return;
 
     commitNarrativeTurn({
@@ -29,7 +29,7 @@ export function NarrativePanel() {
   }
 
   async function handleChoice(choice: StoryChoice) {
-    await runNarrativeTurn(choice.text, choice.id);
+    await runNarrativeTurn(choice.text);
   }
 
   return (

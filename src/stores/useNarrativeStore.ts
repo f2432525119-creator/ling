@@ -22,8 +22,7 @@ type NarrativeStore = {
     response: NarrativeApiResponse;
     userText: string;
   }) => void;
-  requestNarrative: (userInput: string, selectedChoiceId?: string | null) => Promise<NarrativeApiResponse | null>;
-  setCurrentNodeId: (nodeId: string) => void;
+  requestNarrative: (userInput: string) => Promise<NarrativeApiResponse | null>;
   resetNarrative: () => void;
 };
 
@@ -93,7 +92,7 @@ export const useNarrativeStore = create<NarrativeStore>((set, get) => ({
       nextNode.id,
     );
   },
-  requestNarrative: async (userInput, selectedChoiceId = null) => {
+  requestNarrative: async (userInput) => {
     set({ isGenerating: true, error: null });
     try {
       const worldState = useWorldStore.getState().worldState;
@@ -108,7 +107,7 @@ export const useNarrativeStore = create<NarrativeStore>((set, get) => ({
       const mode: NarrativeMode = session.mode === "sandbox" ? "user_driven" : "mixed";
       const payload: NarrativeApiRequest = {
         mode,
-        user_input: { text: userInput, selected_choice_id: selectedChoiceId },
+        user_input: { text: userInput, selected_choice_id: null },
         world_state: {
           tick: worldState.tick,
           timeline: worldState.timeline,
@@ -165,12 +164,6 @@ export const useNarrativeStore = create<NarrativeStore>((set, get) => ({
     } finally {
       set({ isGenerating: false });
     }
-  },
-  setCurrentNodeId: (nodeId) => {
-    const nodeExists = get().nodes.some((node) => node.id === nodeId);
-    if (!nodeExists) return;
-
-    set({ currentNodeId: nodeId });
   },
   resetNarrative: () => {
     set({

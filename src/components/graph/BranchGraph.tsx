@@ -6,6 +6,9 @@ import ReactFlow, { Background, Controls, MiniMap } from "reactflow";
 import { useGraphStore } from "@/stores/useGraphStore";
 import { useNarrativeStore } from "@/stores/useNarrativeStore";
 
+const NODE_TYPES = {};
+const EDGE_TYPES = {};
+
 export function BranchGraph() {
   const graphNodes = useGraphStore((state) => state.nodes);
   const graphEdges = useGraphStore((state) => state.edges);
@@ -14,7 +17,6 @@ export function BranchGraph() {
   const setSelectedNodeId = useGraphStore((state) => state.setSelectedNodeId);
   const narrativeNodes = useNarrativeStore((state) => state.nodes);
   const currentNodeId = useNarrativeStore((state) => state.currentNodeId);
-  const setCurrentNodeId = useNarrativeStore((state) => state.setCurrentNodeId);
 
   useEffect(() => {
     rebuildFromNarrative(narrativeNodes, currentNodeId);
@@ -57,6 +59,8 @@ export function BranchGraph() {
       <ReactFlow
         nodes={displayNodes}
         edges={graphEdges}
+        nodeTypes={NODE_TYPES}
+        edgeTypes={EDGE_TYPES}
         fitView
         panOnDrag
         zoomOnPinch
@@ -64,7 +68,6 @@ export function BranchGraph() {
         selectionOnDrag
         onNodeClick={(_, node) => {
           setSelectedNodeId(node.id);
-          setCurrentNodeId(node.id);
         }}
         onPaneClick={() => setSelectedNodeId(null)}
         proOptions={{ hideAttribution: true }}

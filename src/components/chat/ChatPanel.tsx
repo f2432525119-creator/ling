@@ -12,7 +12,8 @@ export function ChatPanel() {
 
   async function handleSubmit(userInput: string) {
     const response = await requestNarrative(userInput);
-    commitNarrativeTurn(userInput, response);
+    if (!response) return;
+    commitNarrativeTurn({ userText: userInput, response });
   }
 
   return (

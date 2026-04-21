@@ -57,7 +57,7 @@ export const useNarrativeStore = create<NarrativeStore>((set, get) => ({
       meta: {
         id: nextNodeId,
         title: response.next_node_meta.title ?? "剧情推进",
-        arc: response.next_node_meta.arc ?? response.next_node_meta.type,
+        arc: response.next_node_meta.arc ?? response.next_node_meta.type ?? "scene",
       },
     };
 

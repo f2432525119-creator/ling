@@ -28,13 +28,22 @@ export type NarrativeMessage = {
   nodeId: string;
 };
 
-export type StructuredAIResponse = {
+export type NarrativeApiNodeMeta = {
+  id: string;
+  title?: string;
+  arc?: string;
+  type?: string;
+};
+
+export type NarrativeApiResponse = {
   narration: string;
   choices: StoryChoice[];
   state_update: StateUpdate;
-  next_node_meta: StoryNodeMeta;
+  next_node_meta: NarrativeApiNodeMeta;
   meta?: NarrativeApiMeta;
 };
+
+export type StructuredAIResponse = NarrativeApiResponse;
 
 export type NarrativeMode = "ai_driven" | "user_driven" | "mixed";
 

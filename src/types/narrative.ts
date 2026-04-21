@@ -72,5 +72,3 @@ export type NarrativeApiMeta = {
   parser_warnings?: string[];
 };
 
-
-export type NarrativeApiResponse = StructuredAIResponse;

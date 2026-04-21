@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useMemo } from "react";
-import ReactFlow, { Background, Controls, MiniMap } from "reactflow";
+import ReactFlow, { Background, Controls, MiniMap, type EdgeTypes, type NodeTypes } from "reactflow";
 
 import { useGraphStore } from "@/stores/useGraphStore";
 import { useNarrativeStore } from "@/stores/useNarrativeStore";
 
-const NODE_TYPES = {};
-const EDGE_TYPES = {};
+const NODE_TYPES: NodeTypes = {};
+const EDGE_TYPES: EdgeTypes = {};
 
 export function BranchGraph() {
   const graphNodes = useGraphStore((state) => state.nodes);

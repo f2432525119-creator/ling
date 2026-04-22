@@ -210,7 +210,7 @@ function materializeDelayedEffects(
   return { worldState: nextWorldState, warnings };
 }
 
-export const useWorldStore = create<WorldStateStore>((set) => ({
+export const useWorldStore = create<WorldStateStore>((set, get) => ({
   worldState: initialWorldState,
   warnings: [],
 
@@ -269,7 +269,7 @@ export const useWorldStore = create<WorldStateStore>((set) => ({
     }),
 
   getPendingDelayedEffects: () => {
-    const { worldState } = useWorldStore.getState();
+    const { worldState } = get();
     return worldState.delayedEffects.filter((effect) => effect.status === "pending");
   },
 

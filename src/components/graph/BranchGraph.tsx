@@ -1,7 +1,13 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
-import ReactFlow, { Background, Controls, MiniMap, type EdgeTypes, type NodeTypes } from "reactflow";
+import { useEffect, useMemo, useRef } from "react";
+import ReactFlow, {
+  Background,
+  Controls,
+  MiniMap,
+  type EdgeTypes,
+  type NodeTypes,
+} from "reactflow";
 
 import { useGraphStore } from "@/stores/useGraphStore";
 import { useNarrativeStore } from "@/stores/useNarrativeStore";
@@ -13,14 +19,38 @@ export function BranchGraph() {
   const graphNodes = useGraphStore((state) => state.nodes);
   const graphEdges = useGraphStore((state) => state.edges);
   const selectedNodeId = useGraphStore((state) => state.selectedNodeId);
-  const rebuildFromNarrative = useGraphStore((state) => state.rebuildFromNarrative);
   const setSelectedNodeId = useGraphStore((state) => state.setSelectedNodeId);
+
   const narrativeNodes = useNarrativeStore((state) => state.nodes);
+  const narrativeNodeCount = useNarrativeStore((state) => state.nodes.length);
   const currentNodeId = useNarrativeStore((state) => state.currentNodeId);
 
+  const latestNarrativeNodesRef = useRef(narrativeNodes);
+  const lastBuildRef = useRef<{ count: number; currentNodeId: string } | null>(null);
+
   useEffect(() => {
-    rebuildFromNarrative(narrativeNodes, currentNodeId);
-  }, [narrativeNodes, currentNodeId, rebuildFromNarrative]);
+    latestNarrativeNodesRef.current = narrativeNodes;
+  }, [narrativeNodes]);
+
+  useEffect(() => {
+    const lastBuild = lastBuildRef.current;
+    if (
+      lastBuild &&
+      lastBuild.count === narrativeNodeCount &&
+      lastBuild.currentNodeId === currentNodeId
+    ) {
+      return;
+    }
+
+    lastBuildRef.current = {
+      count: narrativeNodeCount,
+      currentNodeId,
+    };
+
+    useGraphStore
+      .getState()
+      .rebuildFromNarrative(latestNarrativeNodesRef.current, currentNodeId);
+  }, [narrativeNodeCount, currentNodeId]);
 
   const displayNodes = useMemo(
     () =>
@@ -54,11 +84,13 @@ export function BranchGraph() {
     [graphNodes, selectedNodeId],
   );
 
+  const displayEdges = useMemo(() => graphEdges, [graphEdges]);
+
   return (
     <div className="h-full w-full">
       <ReactFlow
         nodes={displayNodes}
-        edges={graphEdges}
+        edges={displayEdges}
         nodeTypes={NODE_TYPES}
         edgeTypes={EDGE_TYPES}
         fitView

@@ -23,7 +23,7 @@ export type NarrativeNode = {
 
 export type NarrativeMessage = {
   id: string;
-  role: "user" | "narrator";
+  role: "user" | "narrator" | "character";
   content: string;
   nodeId: string;
 };
@@ -71,3 +71,4 @@ export type NarrativeApiMeta = {
   warnings?: string[];
   parser_warnings?: string[];
 };
+

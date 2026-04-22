@@ -6,7 +6,7 @@ import { useSessionStore } from "@/stores/useSessionStore";
 import { useWorldStore } from "@/stores/useWorldStore";
 import type {
   NarrativeApiRequest,
-  NarrativeApiResponse,
+  StructuredAIResponse,
   NarrativeMessage,
   NarrativeMode,
   NarrativeNode,
@@ -19,10 +19,10 @@ type NarrativeStore = {
   isGenerating: boolean;
   error: string | null;
   commitNarrativeTurn: (args: {
-    response: NarrativeApiResponse;
+    response: StructuredAIResponse;
     userText: string;
   }) => void;
-  requestNarrative: (userInput: string) => Promise<NarrativeApiResponse | null>;
+  requestNarrative: (userInput: string) => Promise<StructuredAIResponse | null>;
   resetNarrative: () => void;
 };
 
@@ -57,7 +57,7 @@ export const useNarrativeStore = create<NarrativeStore>((set, get) => ({
       meta: {
         id: nextNodeId,
         title: response.next_node_meta.title ?? "剧情推进",
-        arc: response.next_node_meta.arc ?? response.next_node_meta.type,
+        arc: response.next_node_meta.arc ?? "剧情推进",
       },
     };
 
@@ -144,7 +144,7 @@ export const useNarrativeStore = create<NarrativeStore>((set, get) => ({
         return null;
       }
 
-      const data = (await res.json()) as Partial<NarrativeApiResponse>;
+      const data = (await res.json()) as Partial<StructuredAIResponse>;
       if (
         typeof data.narration !== "string" ||
         !Array.isArray(data.choices) ||
@@ -155,7 +155,7 @@ export const useNarrativeStore = create<NarrativeStore>((set, get) => ({
         return null;
       }
 
-      return data as NarrativeApiResponse;
+      return data as StructuredAIResponse;
     } catch (error) {
       const message =
         error instanceof Error ? error.message : "unexpected narrative request error";

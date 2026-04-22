@@ -12,14 +12,17 @@ export function ChatPanel() {
 
   async function handleSubmit(userInput: string) {
     const response = await requestNarrative(userInput);
-    commitNarrativeTurn(userInput, response);
+    if (!response) return;
+
+    commitNarrativeTurn({
+      response,
+      userText: userInput,
+    });
   }
 
   return (
     <div className="flex h-full flex-col">
-      <div className="border-b border-black/10 px-4 py-3 text-sm text-black/60">
-        对话叙事
-      </div>
+      <div className="border-b border-black/10 px-4 py-3 text-sm text-black/60">对话叙事</div>
       <MessageList messages={messages} />
       <InputBox onSubmit={handleSubmit} loading={isGenerating} />
     </div>

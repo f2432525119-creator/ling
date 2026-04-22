@@ -26,7 +26,7 @@ export function BranchGraph() {
   const currentNodeId = useNarrativeStore((state) => state.currentNodeId);
 
   const latestNarrativeNodesRef = useRef(narrativeNodes);
-  const lastBuildRef = useRef<{ count: number; currentNodeId: string } | null>(null);
+  const lastBuildRef = useRef<{ count: number; currentNodeId: string | null } | null>(null);
 
   useEffect(() => {
     latestNarrativeNodesRef.current = narrativeNodes;
